@@ -13,28 +13,9 @@ namespace Mine
         private DateTime now = DateTime.Now;
         private DateTime now2 = DateTime.Now;
         private TimeSpan ts;
+        public TimeSpan Ts { get { return this.ts; } }
         private bool _ticking = true;
-
-        public bool Ticking 
-        {
-            get
-            {
-                return this._ticking;
-            }
-            set
-            {
-                _ticking = value;
-            }
-        }
-
-        public TimeSpan Ts
-        {
-            get
-            {
-                return this.ts;
-            }
-        }
-
+        public bool Ticking { get { return this._ticking; } set { _ticking = value; } }
         public StopWatch()
         {
             this.TimeThread = new Thread(()=> {

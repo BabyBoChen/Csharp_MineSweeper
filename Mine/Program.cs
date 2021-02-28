@@ -13,12 +13,12 @@ namespace Mine
             Application.Run(game);
             while (game.NextGame)
             {
-                var size = game.gridSize;
-                var mineCount = game.mineCount;
-                if (game.win == true && size + 5 <= 20)
+                var size = game.GridSize;
+                var mineCount = game.MineCount;
+                if (game.Won == true && size + 5 <= 20)
                 {
                     size += 5;
-                    mineCount = mineCount * 2;
+                    mineCount *= 2;
                 }
                 game = new MainWindow(size, mineCount);
                 Application.Run(game);

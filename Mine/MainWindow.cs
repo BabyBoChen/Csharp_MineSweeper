@@ -8,31 +8,35 @@ namespace Mine
     {
         private delegate void Del(object sender, EventArgs e);  //not quite understand why this delegate is necessary to avoid thread conflicting
 
-        public int gridSize = 10;  //default size
-        public int mineCount = 10;  //default mine count
-        public bool win = false;  //will be true if you win the game
-        public List<Tile> tiles = new List<Tile>();  //all tile will be added to this list of tiles right after they are created.
-        public bool AutoSweep = false;  //if true, neighbor tiles will be swept automatically if they are not near by any mine
-        public bool CheatMode = false;  // if true, reveal all the mines
-        public bool NextGame; 
-        public StopWatch sw;  //a stopwatch measuring the time elapsed during each game
-        public Label LblTime; // the string telling the time on the right side of the MainWindow
+        public int GridSize { get; set; }  //size of the grid
+        public int MineCount { get; set; }  //mine count
+        private bool win = false;  //will be true if you win the game
+        public bool Won { get {return this.win;}}
+        private List<Tile> tiles = new List<Tile>();  //all tile will be added to this list of tiles right after they are created.
+        public bool AutoSweep { get; set; }  //if true, neighbor tiles will be swept automatically if they are not near by any mine
+        public bool CheatMode { get; set; }  // if true, reveal all the mines
+        private bool nextGame;
+        public bool NextGame { get { return this.nextGame; } }
+        private StopWatch sw;  //a stopwatch measuring the time elapsed during each game
+        private Label LblTime; // the string telling the time on the right side of the MainWindow
         public MainWindow(int gridSize, int mineCount)
         {
 
             this.AutoSize = true;
             this.AutoSizeMode = AutoSizeMode.GrowOnly;
             this.Text = "Mine Sweeper";
-            this.gridSize = gridSize;
-            this.mineCount = mineCount;
+            this.GridSize = gridSize;
+            this.MineCount = mineCount;
+            this.AutoSweep = false;
+            this.CheatMode = false;
 
             TableLayoutPanel grid = new TableLayoutPanel();
             grid.CellBorderStyle = TableLayoutPanelCellBorderStyle.Outset;
             grid.Dock = DockStyle.Fill;
             grid.AutoSize = true;
             grid.AutoSizeMode = AutoSizeMode.GrowOnly;
-            grid.ColumnCount = gridSize + 1;  // "+1" for the right-side panel (autosweep button, cheatmode button and time label)
-            grid.RowCount = gridSize;
+            grid.ColumnCount = this.GridSize + 1;  // "+1" for the right-side panel (autosweep button, cheatmode button and time label)
+            grid.RowCount = this.GridSize;
 
             // create tiles according to the given gridSize
             for (int r = 0; r < grid.RowCount; r++)
@@ -51,7 +55,7 @@ namespace Mine
                 }
             }
             Tile.GroupNeighbors(this.tiles);  //calculate each tile's neighbor tiles (Tile.cs)
-            MineGen.Generate(tiles,this.mineCount);  //bury mines at randomly selected tiles (MineGen.cs)
+            MineGen.Generate(tiles,this.MineCount);  //bury mines at randomly selected tiles (MineGen.cs)
 
             //right side panel (autosweep button, cheatmode button and time label)
             var menuPanel1 = new Panel();
@@ -119,7 +123,8 @@ namespace Mine
 
             this.Controls.Add(grid); //add the grid to the MainWindow
 
-            this.NextGame = false;
+            this.nextGame = false;
+
         }
 
         public void OnTileClick(Tile tile)
@@ -130,7 +135,7 @@ namespace Mine
                 this.sw.Ticking = false;
                 var rePlay = MessageBox.Show("Play Again?", "You Lose!",MessageBoxButtons.YesNo);
                 this.Close();
-                if (rePlay.ToString() == "Yes") this.NextGame = true;
+                if (rePlay.ToString() == "Yes") this.nextGame = true;
                 return;
             }
             this.Sweep(tile);
@@ -140,7 +145,7 @@ namespace Mine
                 this.sw.Ticking = false;
                 var rePlay = MessageBox.Show("Play Again?", "You Win!", MessageBoxButtons.YesNo);
                 this.Close();
-                if (rePlay.ToString() == "Yes") this.NextGame = true;
+                if (rePlay.ToString() == "Yes") this.nextGame = true;
                 return;
             }
         }

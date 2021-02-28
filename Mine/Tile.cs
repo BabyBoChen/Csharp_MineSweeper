@@ -7,11 +7,11 @@ namespace Mine
 {
     class Tile : Button
     {
-        public int X;
-        public int Y;
-        public string Id;
-        public bool IsMine;
-        public int Hint = 0;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Id { get; set; }
+        public bool IsMine { get; set; }
+        public int Hint { get; set; }
         public List<Tile> Neighbors = new List<Tile>();
         public Tile(int x, int y) : base()
         {
@@ -63,7 +63,6 @@ namespace Mine
             return null;
         }
     }
-
     enum TileNeighbor
     {
         TL,
