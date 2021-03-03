@@ -8,21 +8,23 @@ namespace Mine
         [STAThread]
         static void Main(string[] args)
         {
-            MainWindow game = new MainWindow(10,10);
             Application.EnableVisualStyles();
-            Application.Run(game);
-            while (game.NextGame)
+            var size = 10;
+            var mineCount = 10;
+            MainWindow game;
+            do
             {
-                var size = game.GridSize;
-                var mineCount = game.MineCount;
+                game = new MainWindow(size, mineCount);
+                Application.Run(game);
+                size = game.GridSize;
+                mineCount = game.MineCount;
                 if (game.Won == true && size + 5 <= 20)
                 {
                     size += 5;
                     mineCount *= 2;
                 }
-                game = new MainWindow(size, mineCount);
-                Application.Run(game);
-            }
+
+            } while (game.NextGame);
         }
     }
 }
